@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 import inquirer from 'inquirer'
+import fs from 'fs'
 import { cpSync } from 'fs'
 import { fileURLToPath } from 'url'
 import path from 'path'
 import { execSync } from 'child_process'
-console.log('🔧 create-pk-project 시작')
+console.log('create-pk-app 시작')
 
 const { template } = await inquirer.prompt([
   {
@@ -23,12 +24,21 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const templateDir = path.join(__dirname, 'templates', template)
 const targetDir = process.cwd()
 
-console.log(`📁 템플릿 복사: ${templateDir} → ${targetDir}`)
+console.log(`템플릿 복사: ${template}`)
 cpSync(templateDir, targetDir, { recursive: true })
 
-console.log('📦 의존성 설치 중...')
+console.log('의존성 설치 중...')
 execSync('yarn', { stdio: 'inherit' })
 
-console.log('✅ 템플릿 적용 및 설치 완료!')
+// INFO : `.gitignore.template` → `.gitignore` 변환 처리
+const ignorePath = path.join(targetDir, 'gitignore.template')
+const finalIgnorePath = path.join(targetDir, '.gitignore')
+
+if (fs.existsSync(ignorePath)) {
+  fs.renameSync(ignorePath, finalIgnorePath)
+  console.log('.gitignore 설정')
+}
+
+console.log('템플릿 적용 및 설치 완료')
 
 
