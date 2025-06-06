@@ -1,7 +1,9 @@
 {
   "name": "create-pk-project",
   "version": "1.0.0",
-  "main": "index.js",
+  "bin": {
+    "create-pk-project": "index.js"
+  },
   "type": "commonjs",
   "repository": "https://github.com/pukkok/create-pk-project.git",
   "author": "Pukkok <krystalgggg@gmail.com>",
