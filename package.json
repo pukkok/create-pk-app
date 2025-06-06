@@ -1,11 +1,11 @@
 {
-  "name": "create-pk-project",
+  "name": "create-pk-app",
   "version": "1.0.0",
   "bin": {
-    "create-pk-project": "index.js"
+    "create-pk-app": "index.js"
   },
   "type": "module",
-  "repository": "https://github.com/pukkok/create-pk-project.git",
+  "repository": "https://github.com/pukkok/create-pk-app.git",
   "author": "Pukkok <krystalgggg@gmail.com>",
   "license": "MIT",
   "dependencies": {
