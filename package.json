@@ -1,0 +1,12 @@
+{
+  "name": "create-pk-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "repository": "https://github.com/pukkok/create-pk-project.git",
+  "author": "Pukkok <krystalgggg@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "inquirer": "^12.6.3"
+  }
+}
