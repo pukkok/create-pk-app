@@ -1,73 +1,34 @@
 #!/usr/bin/env node
 
 import inquirer from 'inquirer'
+import { cpSync } from 'fs'
+import { fileURLToPath } from 'url'
+import path from 'path'
 import { execSync } from 'child_process'
-import fs from 'fs'
-import fsPromises from 'fs/promises'
-
 console.log('🔧 create-pk-project 시작')
 
-const { projectType, useTailwind, projectName } = await inquirer.prompt([
-  {
-    type: 'input',
-    name: 'projectName',
-    message: '생성할 프로젝트 이름은?',
-    default: 'pk-app'
-  },
+const { template } = await inquirer.prompt([
   {
     type: 'list',
-    name: 'projectType',
-    message: '어떤 프로젝트를 생성할까요?',
-    choices: ['Vite', 'Next.js']
-  },
-  {
-    type: 'confirm',
-    name: 'useTailwind',
-    message: 'Tailwind를 포함할까요?',
-    default: true
+    name: 'template',
+    message: '사용할 템플릿을 선택하세요:',
+    choices: [
+      { name: 'Vite + Tailwind', value: 'vite-tailwind' },
+      { name: 'Vite (기본)', value: 'vite-basic' }
+    ]
   }
 ])
 
-if (!fs.existsSync(projectName)) fs.mkdirSync(projectName)
-process.chdir(projectName)
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const templateDir = path.join(__dirname, 'templates', template)
+const targetDir = process.cwd()
 
-if (projectType === 'Vite') {
-  execSync('yarn create vite . --template react', { stdio: 'inherit' })
-  execSync('yarn', { stdio: 'inherit' })
+console.log(`📁 템플릿 복사: ${templateDir} → ${targetDir}`)
+cpSync(templateDir, targetDir, { recursive: true })
 
-  if (useTailwind) {
-    console.log('💨 Tailwind 설치 중...')
-    execSync('yarn add -D tailwindcss postcss autoprefixer', { stdio: 'inherit' })
-    execSync('npx tailwindcss init -p', { stdio: 'inherit' })
+console.log('📦 의존성 설치 중...')
+execSync('yarn', { stdio: 'inherit' })
 
-    const tailwindConfig = `
-/** @type {import('tailwindcss').Config} */
-export default {
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
-  theme: { extend: {} },
-  plugins: [],
-}`
-    await fsPromises.writeFile('tailwind.config.js', tailwindConfig)
-    console.log('✅ Tailwind 설정 완료')
-  }
-}
+console.log('✅ 템플릿 적용 및 설치 완료!')
 
-if (projectType === 'Next.js') {
-  execSync('yarn create next-app .', { stdio: 'inherit' })
 
-  if (useTailwind) {
-    console.log('💨 Tailwind 설치 중...')
-    execSync('yarn add -D tailwindcss postcss autoprefixer', { stdio: 'inherit' })
-    execSync('npx tailwindcss init -p', { stdio: 'inherit' })
-
-    const tailwindConfig = `export default {
-  content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
-  theme: { extend: {} },
-  plugins: [],
-}`
-    await fsPromises.writeFile('tailwind.config.js', tailwindConfig)
-    console.log('✅ Tailwind 설정 완료')
-  }
-}
-
-console.log(`🎉 ${projectName} 생성 완료!`)
