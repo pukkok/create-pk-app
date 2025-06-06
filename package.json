@@ -2,7 +2,7 @@
   "name": "create-pk-project",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "repository": "https://github.com/pukkok/create-pk-project.git",
   "author": "Pukkok <krystalgggg@gmail.com>",
   "license": "MIT",
