@@ -14,6 +14,8 @@ const { template } = await inquirer.prompt([
     name: 'template',
     message: '사용할 템플릿을 선택하세요:',
     choices: [
+      { name: 'Next + Tailwind', value: 'next-tailwind'},
+      { name: 'Next (기본)', value: 'next-basic'},
       { name: 'Vite + Tailwind', value: 'vite-tailwind' },
       { name: 'Vite (기본)', value: 'vite-basic' }
     ]
